@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans 
+       	http://www.springframework.org/schema/beans/spring-beans.xsd 
+		http://code.alibabatech.com/schema/dubbo 
+		http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+		<!-- 重试的次数 -->
+		<dubbo:consumer retries="0" timeout="10000"/>
+		<!-- 1.应用名 -->
+		<dubbo:application name="ego-sso-web"/>
+		<dubbo:registry protocol="zookeeper" address="${zookeeper.url}"/>
+		<!--3.引用服务
+		<dubbo:reference interface="com.bjsxt.service.GoodsCategoryService" id="goodsCategoryService"/> -->
+		<dubbo:annotation package="com.bjsxt.controller"/>
+</beans>

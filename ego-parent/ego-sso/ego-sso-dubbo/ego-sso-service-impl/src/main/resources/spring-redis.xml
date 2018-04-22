@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd
+        ">
+         <!-- 6个节点信息 -->
+        <bean id="node1" class="redis.clients.jedis.HostAndPort">
+        	<constructor-arg name="host" value="${redis1.host}"/>
+        	<constructor-arg name="port" value="${redis1.port}"/>
+        </bean>
+        
+        <bean id="node2" class="redis.clients.jedis.HostAndPort">
+        	<constructor-arg name="host" value="${redis2.host}"/>
+        	<constructor-arg name="port" value="${redis2.port}"/>
+        </bean>
+        
+        <bean id="node3" class="redis.clients.jedis.HostAndPort">
+        	<constructor-arg name="host" value="${redis3.host}"/>
+        	<constructor-arg name="port" value="${redis3.port}"/>
+        </bean>
+        
+        <bean id="node4" class="redis.clients.jedis.HostAndPort">
+        	<constructor-arg name="host" value="${redis4.host}"/>
+        	<constructor-arg name="port" value="${redis4.port}"/>
+        </bean>
+        
+        <bean id="node5" class="redis.clients.jedis.HostAndPort">
+        	<constructor-arg name="host" value="${redis5.host}"/>
+        	<constructor-arg name="port" value="${redis5.port}"/>
+        </bean>
+        
+        <bean id="node6" class="redis.clients.jedis.HostAndPort">
+        	<constructor-arg name="host" value="${redis6.host}"/>
+        	<constructor-arg name="port" value="${redis6.port}"/>
+        </bean>
+       	<!-- 配置redis集群 -->
+       	<bean id="jedisCluster" class="redis.clients.jedis.JedisCluster">
+       		<constructor-arg name="nodes">
+       			<set>
+       				<ref bean="node1" />
+       				<ref bean="node2" />
+       				<ref bean="node3" />
+       				<ref bean="node4" />
+       				<ref bean="node5" />
+       				<ref bean="node6" />
+       			</set>
+       		</constructor-arg>
+       	</bean>
+</beans>

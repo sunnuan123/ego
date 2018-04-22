@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/tx
+        http://www.springframework.org/schema/tx/spring-tx.xsd
+        http://www.springframework.org/schema/aop
+        http://www.springframework.org/schema/aop/spring-aop.xsd
+        ">
+         <!-- 0.使用cglib方式实现动态代理 false:jdk动态代理  true:cglib动态代理 -->
+        <aop:aspectj-autoproxy proxy-target-class="true" />
+        <!-- 1.事物管理器-->
+        <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        	<property name="dataSource" ref="dataSource"/>
+        </bean>
+        
+        <!-- 2.通知 -->
+        <tx:advice id="txAdvice" transaction-manager="transactionManager">
+        	<tx:attributes>
+        		<!-- MANDATORY:支持事务，如果当前没有事务，则抛出异常
+        			 NESTED:事务的嵌套
+        			 NEVER：不支持事务，如果当前有事务，则抛出异常
+        			 NOT_SUPPORTED：不支持事务，如果当前有事务，则挂起当前事务
+        			 REQUIRED：支持事务，如果当前没有事务，则创建一个事务
+        			 REQUIRES_NEW：无论事务是否存在，创建新的事务
+        			 SUPPORTS：支持事务，如果当前没有事务，不做任何处理
+        		 -->
+        		<tx:method name="insert*" propagation="REQUIRED"/>
+        		<tx:method name="save*" propagation="REQUIRED"/>
+        		<tx:method name="add*" propagation="REQUIRED"/>
+        		<tx:method name="del*" propagation="REQUIRED"/>
+        		<tx:method name="update*" propagation="REQUIRED"/>
+        		<tx:method name="find*" read-only="true"/>
+        		<tx:method name="show*" read-only="true"/>
+        		<tx:method name="get*" read-only="true"/>
+        		<tx:method name="select*" read-only="true"/>
+        		<tx:method name="*" propagation="REQUIRED"/>
+        	</tx:attributes>
+        </tx:advice>
+        
+        <!-- 3.aop -->
+        <aop:config>
+        	<aop:pointcut expression="execution(* com.bjsxt.service.*.*(..))" id="myPointcut"/>
+        	<aop:advisor advice-ref="txAdvice" pointcut-ref="myPointcut"/>
+        </aop:config>
+</beans>
